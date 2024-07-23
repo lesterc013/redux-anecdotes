@@ -5,7 +5,11 @@ import {
 } from './reducers/anecdoteReducer'
 
 const App = () => {
-  const anecdotes = useSelector((state) => state)
+  const anecdotes = useSelector((state) => state).toSorted(
+    (a, b) => b.votes - a.votes
+  )
+  // const sortedAnecdotes = anecdotes.toSorted((a, b) => b.votes - a.votes)
+  // console.log(sortedAnecdotes)
   const dispatch = useDispatch()
 
   const handleNewAnecdote = (event) => {

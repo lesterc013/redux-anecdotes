@@ -1,4 +1,4 @@
-import { createFilterAction } from '../reducers/filterReducer'
+import { createFilter } from '../reducers/filterReducer'
 import { useDispatch } from 'react-redux'
 
 const Filter = () => {
@@ -9,7 +9,7 @@ const Filter = () => {
       <input
         type='text'
         name='filter'
-        onChange={(event) => dispatch(createFilterAction(event.target.value))}
+        onChange={(event) => dispatch(createFilter(event.target.value))}
       />
     </>
   )

@@ -5,6 +5,12 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { createSelector } from 'reselect'
 import { createVote } from '../reducers/anecdoteReducer'
+import {
+  createNewVoteNotification,
+  createNewTimeoutId,
+  clearTimeoutId,
+  createClearNotification,
+} from '../reducers/notificationReducer'
 
 const Anecdote = ({ content, votes, handleClick }) => {
   return (
@@ -38,17 +44,20 @@ const selectFilteredAnecdotes = createSelector(
 )
 
 const AnecdoteList = () => {
-  // Basic workaround to re-rendering arrays with useSelector
-  // const filter = useSelector((state) => state.filter)
-  // const anecdotesRaw = useSelector((state) => state.anecdotes)
-  // const anecdotes = anecdotesRaw
-  //   .filter((anecdote) => anecdote.content.toLowerCase().includes(filter))
-  //   .toSorted((a, b) => b.votes - a.votes)
-
   // useSelector which will run the memoization fn
   const anecdotes = useSelector(selectFilteredAnecdotes)
-
   const dispatch = useDispatch()
+
+  const clickVote = (anecdote) => {
+    dispatch(createVote(anecdote.id))
+    dispatch(createNewVoteNotification(anecdote.content))
+
+    dispatch(clearTimeoutId())
+    const newTimeoutId = setTimeout(() => {
+      dispatch(createClearNotification())
+    }, 5000)
+    dispatch(createNewTimeoutId(newTimeoutId))
+  }
 
   return (
     <>
@@ -57,7 +66,7 @@ const AnecdoteList = () => {
           key={anecdote.id}
           content={anecdote.content}
           votes={anecdote.votes}
-          handleClick={() => dispatch(createVote(anecdote.id))}
+          handleClick={() => clickVote(anecdote)}
         />
       ))}
     </>

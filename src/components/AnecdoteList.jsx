@@ -4,7 +4,7 @@
 
 import { useSelector, useDispatch } from 'react-redux'
 import { createSelector } from 'reselect'
-import { createVoteAction } from '../reducers/anecdoteReducer'
+import { createVote } from '../reducers/anecdoteReducer'
 
 const Anecdote = ({ content, votes, handleClick }) => {
   return (
@@ -57,7 +57,7 @@ const AnecdoteList = () => {
           key={anecdote.id}
           content={anecdote.content}
           votes={anecdote.votes}
-          handleClick={() => dispatch(createVoteAction(anecdote.id))}
+          handleClick={() => dispatch(createVote(anecdote.id))}
         />
       ))}
     </>

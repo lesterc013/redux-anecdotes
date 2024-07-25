@@ -6,13 +6,15 @@ import {
   createNewTimeoutId,
   clearTimeoutId,
 } from '../reducers/notificationReducer'
+import anecdotesService from '../../services/anecdotesService'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
 
-  const handleNewAnecdote = (event) => {
+  const handleNewAnecdote = async (event) => {
     event.preventDefault()
-    const newAnecdote = event.target.newAnecdote.value
+    const newAnecdoteContent = event.target.newAnecdote.value
+    const newAnecdote = await anecdotesService.postAnecdote(newAnecdoteContent)
     dispatch(createAnecdote(newAnecdote))
     dispatch(clearTimeoutId())
     dispatch(createNewAnecdoteNotification(newAnecdote))

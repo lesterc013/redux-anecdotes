@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import anecdotesService from '../../services/anecdotesService'
 
+// Using createAsyncThunk
 export const initializeAnecdotes = createAsyncThunk(
   'anecdotes/initializeAnecdotes',
   async () => {
@@ -8,6 +9,14 @@ export const initializeAnecdotes = createAsyncThunk(
     return anecdotes
   }
 )
+
+// Using traditional means
+export const createAnecdoteThunk = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdotesService.postAnecdote(content)
+    dispatch(createAnecdote(newAnecdote))
+  }
+}
 
 const anecdoteSlice = createSlice({
   name: 'anecdotes',

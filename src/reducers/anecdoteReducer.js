@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import anecdotesService from '../../services/anecdotesService'
-import { createNewVoteNotification } from './notificationReducer'
+// import { createNewVoteNotification } from './notificationReducer'
 
 // Using createAsyncThunk
 export const initializeAnecdotes = createAsyncThunk(
@@ -23,7 +23,7 @@ export const voteThunk = (anecdote) => {
   return async (dispatch) => {
     const updatedAnecdote = await anecdotesService.upvote(anecdote)
     dispatch(createVote(updatedAnecdote))
-    dispatch(createNewVoteNotification(updatedAnecdote.content))
+    // dispatch(createNewVoteNotification(updatedAnecdote.content))
   }
 }
 

@@ -1,6 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
 // useSelector here to get the latest anecdote?
 
+export const setNotificationThunk = (notification, time) => {
+  return async (dispatch) => {
+    dispatch(clearTimeoutId())
+    dispatch(setNotification(notification))
+    const newTimeoutId = setTimeout(() => {
+      dispatch(clearNotification())
+    }, time * 1000)
+
+    // Set timeoutId..
+    dispatch(setTimeoutId(newTimeoutId))
+    // So we can clear it at the very beginning
+  }
+}
+
 const notificationSlice = createSlice({
   name: 'notification',
   initialState: {
@@ -8,33 +22,26 @@ const notificationSlice = createSlice({
     timeoutId: null,
   },
   reducers: {
-    createNewAnecdoteNotification(state, action) {
-      const content = action.payload
-      state.notification = `You added '${content}'`
+    setNotification(state, action) {
+      state.notification = action.payload
     },
-    createNewVoteNotification(state, action) {
-      const content = action.payload
-      state.notification = `You voted for '${content}'`
+    clearNotification(state) {
+      state.notification = ''
     },
-    createNewTimeoutId(state, action) {
-      const timeoutId = action.payload
-      state.timeoutId = timeoutId
+    setTimeoutId(state, action) {
+      state.timeoutId = action.payload
     },
     clearTimeoutId(state) {
       clearTimeout(state.timeoutId)
       state.timeoutId = null
-    },
-    createClearNotification(state) {
-      state.notification = ''
     },
   },
 })
 
 export default notificationSlice.reducer
 export const {
-  createNewAnecdoteNotification,
-  createNewVoteNotification,
-  createNewTimeoutId,
+  setNotification,
+  clearNotification,
+  setTimeoutId,
   clearTimeoutId,
-  createClearNotification,
 } = notificationSlice.actions

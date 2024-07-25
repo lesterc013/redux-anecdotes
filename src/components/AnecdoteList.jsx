@@ -4,9 +4,8 @@
 
 import { useSelector, useDispatch } from 'react-redux'
 import { createSelector } from 'reselect'
-import { createVote } from '../reducers/anecdoteReducer'
+import { voteThunk } from '../reducers/anecdoteReducer'
 import {
-  createNewVoteNotification,
   createNewTimeoutId,
   clearTimeoutId,
   createClearNotification,
@@ -48,10 +47,8 @@ const AnecdoteList = () => {
   const anecdotes = useSelector(selectFilteredAnecdotes)
   const dispatch = useDispatch()
 
-  const clickVote = (anecdote) => {
-    dispatch(createVote(anecdote.id))
-    dispatch(createNewVoteNotification(anecdote.content))
-
+  const clickVote = async (anecdote) => {
+    dispatch(voteThunk(anecdote))
     dispatch(clearTimeoutId())
     const newTimeoutId = setTimeout(() => {
       dispatch(createClearNotification())

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import anecdotesService from '../../services/anecdotesService'
+import { createNewVoteNotification } from './notificationReducer'
 
 // Using createAsyncThunk
 export const initializeAnecdotes = createAsyncThunk(
@@ -18,6 +19,14 @@ export const createAnecdoteThunk = (content) => {
   }
 }
 
+export const voteThunk = (anecdote) => {
+  return async (dispatch) => {
+    const updatedAnecdote = await anecdotesService.upvote(anecdote)
+    dispatch(createVote(updatedAnecdote))
+    dispatch(createNewVoteNotification(updatedAnecdote.content))
+  }
+}
+
 const anecdoteSlice = createSlice({
   name: 'anecdotes',
   initialState: {
@@ -30,13 +39,9 @@ const anecdoteSlice = createSlice({
       state.anecdotes.push(action.payload)
     },
     createVote(state, action) {
-      const id = action.payload
-      const anecdoteToUpdate = state.find((anecdote) => anecdote.id === id)
-      const updated = {
-        ...anecdoteToUpdate,
-        votes: anecdoteToUpdate.votes + 1,
-      }
-      return state.anecdotes.map((anecdote) =>
+      const updated = action.payload
+      const id = updated.id
+      state.anecdotes = state.anecdotes.map((anecdote) =>
         anecdote.id !== id ? anecdote : updated
       )
     },

@@ -28,7 +28,7 @@ const Anecdote = ({ content, votes, handleClick }) => {
 // This was the case for previous case when all the filtering was within useSelector - which would cause expensive rendering issues
 
 // Fn to select anecdotes
-const selectAnecdotes = (state) => state.anecdotes
+const selectAnecdotes = (state) => state.anecdotes.anecdotes
 // Fn to select filter
 const selectFilter = (state) => state.filter
 
